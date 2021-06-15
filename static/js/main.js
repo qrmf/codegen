@@ -1,8 +1,14 @@
 /************************************************
+ * Constants
+ ************************************************/
+const charset = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+
+/************************************************
  * Buttons
  ************************************************/
 const alterIDGenerator = document.getElementById('alterIDGenerator');
 const caseIDGenerator = document.getElementById('caseIDGenerator');
+const documentIDGenerator = document.getElementById('documentIDGenerator');
 const clearEntries = document.getElementById('clearEntries');
 
 /************************************************
@@ -21,17 +27,41 @@ const generateOutputEntry = (output) => {
   return undefined;
 }
 
-alterIDGenerator.onclick = () => {
-  const charset = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+/**
+ * @param {number} length
+ * @param {boolean} numbers
+ * @returns string
+ */
+const randomCharacterGenerator = (length, numbers) => {
+  let ret = '';
 
-  let text = '';
-
-  for (let i = 0; i < 5; i++)
-    text += charset.charAt(
+  let chars = charset;
+  if (numbers) chars += '0123456789'
+  
+  for (let i = 0; i < length; i++)
+    ret += chars.charAt(
       Math.floor(
         Math.random() * charset.length));
 
-  generateOutputEntry(`ALTER ID: ${text}`);
+  return ret;
+}
+
+alterIDGenerator.onclick = () => {
+  generateOutputEntry(`ALTER ID: ${randomCharacterGenerator(5)}`);
+}
+
+documentIDGenerator.onclick = () => {
+  let id = '';
+
+  id += randomCharacterGenerator(4, false);
+  id += '/';
+  id += randomCharacterGenerator(4, true);
+  id += '/';
+  id += randomCharacterGenerator(3, true);
+  id += '/';
+  id += randomCharacterGenerator(1, false);
+
+  generateOutputEntry(`Document ID: ${id}`);
 }
 
 caseIDGenerator.onclick = () => {
